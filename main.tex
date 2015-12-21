@@ -1,0 +1,243 @@
+\documentclass[11pt]{llncs}
+\usepackage{fullpage}
+
+%
+\usepackage{latexsym,color}
+\usepackage{amscd,amsmath,amssymb}
+\usepackage{amsfonts}
+\usepackage{pifont}
+\usepackage{paralist}
+\usepackage{soul}
+\usepackage{boxedminipage}
+\usepackage{xspace}
+\usepackage{dashbox}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+
+
+\title{Notes on Malleable Signatures}
+
+%\date{} % delete this line to display the current date
+% \institute{
+%IMDEA Software Institute, Madrid, Spain
+%\\ \email{\{dario.fiore\}@imdea.org}
+%\and
+%ENS, CNRS, INRIA, and PSL, Paris, France
+%\\ \email{Anca.Nitulescu@ens.fr}
+% }
+
+\author{}
+\institute{}
+
+
+\usepackage{color}
+\usepackage{notes}
+\usepackage{framed}
+
+ \usepackage{a4wide}
+ 
+ \usepackage{enumitem}
+\usepackage{amssymb}
+  % \setlength{\parskip}{0.1\baselineskip}
+\usepackage{multicol}
+
+%
+\usepackage[utf8]{inputenc} %
+%
+\usepackage{amsmath,amssymb,booktabs}
+
+
+\begin{document}
+\maketitle
+\input{header}
+
+
+\subsection*{Policy-Based Signatures} %\cite{  Bellare}.
+
+%\subsubsection{Policy Checker.} A policy checker
+%is an NP-relation $P: \bits^* \times \bits^* \to \bits$. The first input is a
+%pair $(p, m)$ representing a policy $p \in  \bits^*$ and a message
+%$m \in  \bits^*$, while the second input is a witness
+
+\subsubsection{Predicate.}Let $\M$ be a message space and let $P: 2^{\M} \times \M \to \bits$ be
+a predicate from sets over $\M$ and a message in
+$\M$ to a bit. We say that a message $m \in \M$
+is derivable from the set $M \subseteq \M$ if $P(M,m) = 1$.
+
+A functional signature scheme $\FSig$ for a message space $\M$ and a predicate $P: 2^{\M} \times \M \to \bits$ is a tuple of probabilistic, polynomial-time algorithms
+$(\FSetup, \FKG, \FSign, \FVer)$ that work as follows
+
+\begin{itemize}
+\item $\FSetup(1^\lambda)$: takes a security parameter $\lambda$ and outputs a 
+master verification key $\mvk$ and a master secret key $\msk$.
+
+\item $\FKG(\msk, M)$: takes the master secret key $\msk$ and a description $M \subseteq \M$ and it outputs a signing key $\sk_P$ for $P$.
+
+\item $\FSign(\mvk, f, \sk_f, m)$: takes as input a function $f \in \F$, the signing key
+$\sk_f$ for that, and a message $m \in  \D_f$, and it outputs $(f(m), \sigma)$ where
+$\sigma$ represents a  signature on $f(m)$.
+
+\item $\FVer(\mvk,  m^*, \sigma)$: takes as input the master verification key $\mvk$,
+a message $m^* \in \M$ and a signature $\sigma$, and outputs either $1$ (accept)
+or $0$ (reject).
+\end{itemize}
+and satisfy {\em correctness}, {\em unforgeability},  and {\em function privacy}
+as described below. 
+\begin{itemize}
+
+\item \textbf{Correctness.} A functional signature scheme is correct if the following 
+holds with probability 1:
+$$\forall f \in \F, \ \forall m \in  \D_f, \ (\msk, \mvk) \gets \FSetup(1^\lambda), \  \sk_f  \gets \FKG(\msk, f), $$
+$$  (m^*,\sigma) \gets  \FSign(\mvk, f,  \sk_f, m), \FVer(\mvk, m^*, \sigma) = 1 $$
+
+
+
+\item \textbf{Unforgeablity.} A functional signature scheme is unforgeable if for 
+every PPT adversary $\A$ there is a negligible function $\epsilon$ such that 
+$\Pr[\fsufcma_{\A, \FSig}(\lambda) = 1] \leq \epsilon(\lambda)$ where the experiment 
+$\fsufcma_{\A, \FSig}(\lambda)$ is described in the following:\\
+
+\begin{itemize}
+
+\item[{ Key gen:}] The challenger generates $(\msk, \mvk) \gets  \FSetup(1^\lambda)$,
+and gives $\mvk$ to $\A$.
+
+\item[{ Queries:}] The adversary is allowed to adaptively query a key generation oracle $\Ok$
+and a signing oracle $\Os$, that share a dictionary $D$ indexed by tuples $(f, i) \in \F \times \mathbb{N}$,
+whose entries are signing keys. For answering these queries, the challenger proceeds as follows:
+
+\item $\Ok$ $(f, i)$:
+
+\begin{itemize}
+
+\item If $(f, i) \in D$ (i.e., the adversary had already
+queried the tuple $(f,i)$), then the challenger replies with the same
+key $\sk_f^i$ generated before.
+
+\item Otherwise, generate a new $\sk_f^i \gets \FKG(\msk,f)$, add the entry 
+$(f,i) \to \sk_f^i$ in $D$, and return $\sk_f^i$.
+ 
+\end{itemize}
+
+\item $\Os$ $(f, i,m)$: 
+\begin{itemize}
+\item If there exists an entry for the key $(f, i)$ in $D$, then the challenger
+generates a signature on $f(m)$ using this key, i.e., 
+$\sigma \gets \FSign(\mvk, f, \sk_f^i, m)$.
+
+\item Otherwise, generate a new key $\sk_f^i \gets \FKG(\msk,f)$, add an
+entry $(f,i) \to \sk_f^i$ to $D$, and generate a signature on $f(m)$ using this
+key, i.e., $\sigma \gets \FSign(\mvk, f, \sk_f^i, m)$.\\
+
+\end{itemize}
+
+\item[Forgery:] After the adversary is done with its queries, it outputs a pair
+$(m^*, \sigma)$, and the experiment outputs 1 iff the following conditions hold
+\begin{itemize}
+\item $\FVer(\mvk,  m^*, \sigma)=1$.
+\item there does not exist $m$ such that $m^* = f(m)$ for any $f$ which was
+ sent as a query to the $\Ok$ oracle.
+\item there does not exist a pair $(f,m)$ such that $(f,m)$ was a query to the
+ $\Os$ oracle and $m^*= f(m)$.
+\end{itemize}
+\end{itemize}
+
+
+\item \textbf{Function privacy.} Intuitively, function privacy requires that the
+distribution of signatures on a message $m$ that are generated via different
+keys $\sk_f$ should be computationally indistinguishable, even given the 
+secret keys and master signing key. 
+More formally, a functional signature scheme has function privacy if for every
+PPT adversary $\A$ there is a negligible function $\nu$ such that
+$\Pr[\fspriv_{\A, \FSig}(\lambda) = 1] \leq \nu(\lambda)$ where experiment 
+$\fspriv_{\A, \FSig}(\lambda)$ works as follows:
+\begin{itemize}
+\item The challenger generates a key pair $(\mvk, \msk)  \gets \FSetup(1^\lambda)$
+and gives $(\mvk, \msk)$ to $\A$.
+\item The adversary chooses a function $f_0$ and receives an (honestly generated)
+ secret key $\sk_{f_0} \gets \FKG(\msk, f_0)$.
+\item The adversary chooses a second function $f_1$ such that $|f_0|=|f_1|$ (where
+ padding can be used if there is a known upper bound) and receives an (honestly 
+ generated) secret key $\sk_{f_1} \gets \FKG(\msk, f_1)$.
+\item The adversary chooses a pair of values $(m_0, m_1)$ such that $|m_0| = |m_1|$
+ and $f_0(m_0) = f_1(m_1)$.
+\item The challenger selects a random bit $b \gets \bits$ and computes a signature  
+ on the image message $m^* =f_0(m_0) = f_1(m_1)$ using secret key $\sk_{f_b}$,
+ and gives the resulting signature $\sigma \gets  \FSign(\sk_{f_b}, m_b)$ to $\A$.
+\item The adversary outputs a bit $b'$, and the experiment outputs 1 iff $b' = b$.
+\end{itemize} 
+\end{itemize}
+
+
+
+
+\subsubsection{P-homomorphic Signature Scheme.} %\cite{AhnBonCam2011}.
+\ \\
+\paragraph{Derived Messages}
+Let $\M$ be a message space and let $P: 2^{\M} \times \M \to \bits$ be
+a predicate from sets over $\M$ and a message in
+$\M$ to a bit. We say that a message $m \in \M$
+is derivable from the set $M \subseteq \M$ if $P(M,m) = 1$. \\
+
+
+A P-homomorphic Signature Scheme $\PSig$ for a message space $\M$ and predicate
+$P: 2^{\M} \times \M \to \bits$ is a tuple of probabilistic, polynomial-time algorithms
+$(\PSetup, \PSign, \Derive, \PVer)$ that work as follows
+\begin{itemize}
+\item $\PSetup(1^\lambda)$: takes a security parameter $\lambda$ and outputs a 
+verification key $\pk$, a secret key $\sk$ and a predicate $P$.
+We treat the secret key $\sk$ as a signature on the empty tuple $\epsilon \in \M$.
+We also assume that $\pk$ is embedded in $\sk$.
+
+
+\item $\PSign(\sk, m)$: it outputs a fresh signature $\sigma$ on the message $m \in \M$.
+
+\item $\Derive(\pk, m, \lbrace (\sigma_i, m_i) \rbrace)$: the algorithm takes as input the public key, a set of messages $M= \lbrace m_i \rbrace$ and corresponding signatures $\lbrace \sigma_i \rbrace$, a derived message $m$, and produces a new signature $\sigma_m$ or a special symbol $\perp$ to represent failure. 
+
+\item $\PVer(\pk, m, \sigma_m)$: given a public key, message, and purported signature $\sigma$, the algorithm returns $1$
+if the signature is valid and $0$ otherwise.
+\end{itemize}
+
+A P-homomorphic Signature Scheme $\PSig$ must satisfy {\em correctness}, {\em unforgeability},  and {\em context hiding}
+as described below. 
+\begin{itemize}
+
+\item \textbf{Correctness.} 
+%We require that for all key pairs $(\sk, \pk)$ generated by $\PSetup(1^\lambda)$
+%and for all $M \subset \M$ and
+%$m \in \M$ we have:
+%\begin{itemize}
+%
+%\item if $P(M,m) = 1$ then $\Derive(\pk, m, (Sign(\sk,M),M)) \neq \perp$
+%\item and
+%\end{itemize}
+
+
+
+\item \textbf{Unforgeablity.} 
+\end{itemize}
+
+Consider a classical digital signature scheme $\Sigma$ consists of a triple of algorithms  $\Sigma=(\SignKG,\Sign,\SignVer)$ working as follows:
+\begin{description}
+  \item[$\SignKG(1^{\secpar})$] the key generation takes as input the security parameter $\secpar$ and returns a pair of keys $(\sk,\vk)$.
+  \item[$\Sign(\sk, m)$] on input a signing key $\sk$ and a message $m$, the signing algorithm produces 
+  a signature $\sigma'$.
+  \item[$\SignVer(\vk, m, \sigma')$]  given a triple $\vk,m,\sigma$ the verification algorithm tests if $\sigma'$ is a valid signature on $m$ with respect to verification key $\vk$.
+\end{description} 
+
+We construct a functional signature scheme starting from $\Sigma$ and $\PSig$ as follows:\\
+
+ 
+\bibliographystyle{alpha}
+\bibliography{abbrev3,crypto}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+%\balancecolumns
+\end{document}
