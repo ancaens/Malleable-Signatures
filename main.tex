@@ -64,11 +64,11 @@ $PC$. That $(p,m) \in  \L(PC)$ means that signing
 $m$ is permitted under policy $p$. We say that
 $(p,m,w)$ is $PC$-valid if $PC((p,m),w) = 1$.
 \subsubsection{PBS schemes.}
-A policy-based signature scheme $\PBS= (\PBSetu, \PBKG, \PBSign, \PBVer)$ is a 4-tupe of  polynomial-time algorithms that work as follows
+A policy-based signature scheme $\PBS= (\PBSetup, \PBKG, \PBSign, \PBVer)$ is a 4-tupe of  polynomial-time algorithms that work as follows
 
 \begin{itemize}
-\item $\PBetup(1^\lambda)$: On input the unary-encoded security parameter
-$\lambda$ and outputs a public
+\item $\PBSetup(1^\lambda)$: On input the unary-encoded security parameter
+$\lambda$ outputs a public
 parameter $\mpk$ and a master secret key $\msk$.
 
 \item $\PBKG(\msk, p)$: Takes the master secret key $\msk$ and a policy $p \in  \bits^*$ and it outputs a signing key $\sk_p$ for $p$.
@@ -149,18 +149,22 @@ Consider a classical digital signature scheme $\Sigma$ consists of a triple of a
 
 
 \subsubsection{Construction.}
-We construct a P-homomorphic signature scheme starting from $\Sigma$, $\PBS$ and an additionally zero knowledge proof protocol $\ZK$. For this, we need to introduce a labelling to keep track of the delegated keys. The scheme works as follows:\\
+We construct a $\PBS$ protocol starting from $\Sigma$,P-homomorphic signature scheme  and an additionally zero knowledge proof protocol $\ZK$. For this, we need to introduce a labelling to keep track of the delegated keys. The scheme works as follows:\\
 
 \begin{itemize}
-\item $\PSetup(1^\lambda)$: Runs $(\msk, \mpk) \gets \PBSetup(1^\lambda)$ and $(\sk', \vk') \gets \SignKG(1^{\secpar})$.  Outputs a verification key $\pk=(\mpk, \vk')$, a secret key $\sk=(\msk, \sk')$ and a predicate $P$
-corresponding to a policy $p$.
 
 
-\item $\PSign(\sk, m, \tau)$: it outputs a fresh signature $\sigma$ on the message $m \in \bits^*$ and an additional signature $\sigma' \gets \Sign(\sk', \tau)$.
+\item $\PBSetup(1^\lambda)$: Runs $(\sk, \pk) \gets \PSetup(1^\lambda)$ and $(\sk', \vk') \gets \SignKG(1^{\secpar})$.  Outputs a verification key $\mpk=(\pk, \vk')$, a secret key $\msk=(\sk, \sk')$ and a policy $p$ 
+corresponding to a predicate $P$.
 
-\item $\Derive(\pk, \tau, m, \lbrace (\sigma_i, \sigma'_i, m_i) \rbrace)$: Produces a new signature $\sigma_m$ on the derived message $m$ and a $\ZK$ proof $\pi$ on the validity of the signatures $\sigma_i$s and $\sigma'_i$s.
 
-\item $\PVer(\pk, m, \sigma_m, \pi)$: The algorithm runs the $\ZK$-verification on input $\pi$ and the signature verification for $\sigma_m$.
+\item $\PBKG(\msk, p=(m_i, \tau_i))$: Runs $\sigma_i \gets \PSign(\sk, m_i)$ and $\sigma'_i \gets \Sign(\sk', \tau_i)$ for an additional signature on each tag. Set the signing key $\sk_p$ for $p$ as $\sk_p=(\sigma'_i)$.
+
+\item $\PBSign(\sk_p, m, w= \lbrace (\sigma_i, m_i) \rbrace$: Produces a new signature $\sigma \Derive(\pk, m, \lbrace (\sigma_i, m_i) \rbrace)$ on the derived message $m$ and a $\ZK$ proof $\pi$ on the validity of the secret key and the witness, i.e. on the validity of $\sigma_i'$s and $\sigma_i$s. Set $\sigma_m=(\sigma, \pi)$.
+
+
+\item $\PBVer(\mpk,  m, \sigma_m = (\sigma, \pi))$: The algorithm runs $\PVer(\pk, m, \sigma)$ and the $\ZK$-verification on input $\pi$ and the signature verification for $\sigma_m$.
+
 
 \end{itemize}
 
