@@ -158,9 +158,9 @@ We construct a $\PBS$ protocol starting from $\Sigma$,P-homomorphic signature sc
 corresponding to a predicate $P$.
 
 
-\item $\PBKG(\msk, p=(m_i, \tau_i))$: Runs $\sigma_i \gets \PSign(\sk, m_i)$ and $\sigma'_i \gets \Sign(\sk', \tau_i)$ for an additional signature on each tag. Set the signing key $\sk_p$ for $p$ as $\sk_p=(\sigma'_i)$.
+\item $\PBKG(\msk, p=(m_i, \tau_i))$: Runs $\sigma_i \gets \PSign(\sk, m_i)$ and $\sigma'_i \gets \Sign(\sk', \tau_i)$ an additional signature on each tag. Set the signing key $\sk_p$ for $p$ as $\sk_p=(\sigma'_i)$.
 
-\item $\PBSign(\sk_p, m, w= \lbrace (\sigma_i, m_i) \rbrace$: Produces a new signature $\sigma \Derive(\pk, m, \lbrace (\sigma_i, m_i) \rbrace)$ on the derived message $m$ and a $\ZK$ proof $\pi$ on the validity of the secret key and the witness, i.e. on the validity of $\sigma_i'$s and $\sigma_i$s. Set $\sigma_m=(\sigma, \pi)$.
+\item $\PBSign(\sk_p, m, w= \lbrace (\sigma_i, m_i) \rbrace$: Produces a new signature $\sigma \gets \Derive(\pk, m, \lbrace (\sigma_i, m_i) \rbrace)$ on the derived message $m$ and a $\ZK$ proof $\pi$ on the validity of the secret key and the witness, i.e. on the validity of $\sigma_i'$s and $\sigma_i$s. Set $\sigma_m=(\sigma, \pi)$.
 
 
 \item $\PBVer(\mpk,  m, \sigma_m = (\sigma, \pi))$: The algorithm runs $\PVer(\pk, m, \sigma)$ and the $\ZK$-verification on input $\pi$ and the signature verification for $\sigma_m$.
