@@ -1,0 +1,542 @@
+
+
+
+\newtheorem{clm}{Claim}
+
+% Games
+
+\newenvironment{myexample}[1]{
+  \medskip\noindent
+  \begin{center}
+  \ifFullVersion
+    \begin{boxedminipage}{160mm}
+  \else
+    \begin{boxedminipage}{85mm}
+  \fi
+  \textbf{Example (#1).}
+}{
+  \end{boxedminipage}
+  \end{center}
+}
+
+
+
+%useful commands
+\newcommand{\ignore}[1]{}
+\newcommand{\headingi}[1]{{\textsc{#1}\xspace}}
+\newcommand{\heading}[1]{{\medskip\noindent\headingi{#1}~}}
+\newcommand{\headingb}[1]{{\medskip\noindent\textbf{#1}\xspace}}
+\newcommand{\myparagraph}[1]{{\medskip\noindent\textbf{#1}. }}
+\renewcommand\paragraph[1]{\smallskip\textbf{#1.}}
+
+
+\newcommand{\Exp}{\mathbf{Exp}}
+\def\Adv{\mathbf{Adv}}
+
+
+\newcommand{\BigFig}[1]{\parbox{12pt}{\Huge #1}}
+\newcommand{\BigZero}{\BigFig{0}}
+
+\newcommand{\set}[2]{\{#1, \ldots, #2\}}
+\newcommand{\done}{\ensuremath{\texttt{*}}}
+
+\def\get{{\leftarrow}}
+\def\getsr{\stackrel{{\scriptscriptstyle\$}}{\leftarrow}}
+\def\bits{\{0,1\}}
+\newcommand{\myset}[2]{\{#1, \ldots,#2\}}
+
+\def\one{\ensuremath{^{(1)}}}    % (1) in the exponent
+\def\two{\ensuremath{^{(2)}}}    % (2) in the exponent
+\def\arb{\ensuremath{^{(i)}}}    % (i) in the exponent
+
+\def\yA{{\ensuremath{y_0}}}
+\def\yB{\ensuremath{Y_1}}
+\def\yC{\ensuremath{\hat Y_2}}
+
+%%
+\newcommand{\Gm}{{\sf G}}
+\newcommand{\GmZK}{{\sf ZK\prime G}}
+\def\Bad{{\sf Bad}}
+\def\bad{{\sf bad}}
+\def\Good{{\sf Good}}
+\def\GoodGuess{{\sf GoodGuess}}
+\def\QueryMatch{{\sf QueryMatch}}
+\def\true{{\sf true}}
+\def\false{{\sf false}}
+\def\typei{{\sf Type\mbox{-}I}}
+\def\typeii{{\sf Type\mbox{-}II}}
+\def\Ev{{\sf Ev}}
+
+\def\QueryGuess{{\sf MsgSample}}
+
+\def\counter{{\sf Cnt}}
+
+%symbols
+
+\def\p{\mathsf{p}}
+
+\def\PP{\mathsf{P}}
+
+
+
+\def\A{{\cal A}}
+\def\B{{\cal B}}
+\def\C{{\cal C}}
+\def\D{{\cal D}}
+\def\E{{\cal E}}
+\def\F{{\cal F}}
+\def\G{{\cal G}}
+\def\H{{\cal H}}
+\def\I{{\cal I}}
+\def\J{{\cal J}}
+\def\K{{\cal K}}
+\def\L{{\cal L}}
+\def\M{{\cal M}}
+\def\N{{\cal N}}
+\def\O{{\cal O}}
+\def\P{{\cal P}}
+\def\R{{\cal R}}
+\def\S{{\cal S}}
+\def\T{{\cal T}}
+\def\U{{\cal U}}
+\def\V{{\cal V}}
+\def\W{{\cal W}}
+\def\X{{\cal X}}
+\def\Y{{\cal Y}}
+\def\Z{{\cal Z}}
+\def\ZZ{\mathbb Z}
+\def\qrn{\mathbb{QR}_N}
+\def\QQ{\mathbb Q}
+\def\FF{\mathbb F}
+\def\GG{\mathbb G}
+\def\RR{\mathbb R}
+\def\NN{\mathbb N}
+\def\Rho{\mathrm P}
+\def\OO{\mathbb O}
+\def\NP{{\sf NP}}
+
+
+\def\vA{\vv a}
+\def\vB{\vv b}
+\def\vC{\vv c}
+
+\def\sA{_{\sf a}}
+\def\sB{_{\sf b}}
+\def\sC{_{\sf c}}
+
+\def\zzn{\mathbb{Z}^{*}_{N}}
+\def\zp{\mathbb{Z}_{p}}
+\def\rsagen{{\sf RSAGen}}
+
+%Oracles:
+
+
+\def\Os{\cal O_{\mathsf{sign}}}
+\def\Ok{\cal O_{\mathsf{key}}}
+
+\def\RO{{\sf RO}}
+
+\def\Extr{\E}
+\def\querytranscript{{\sf qt}}
+
+\def\xor{\oplus}
+
+\def\negl{{\sf negl}}
+\def\poly{{\sf poly}}
+\def\secpar{\lambda}
+
+
+\def\pp{{\sf pp}}
+\def\blin{{\sf bg}}
+\def\blinpp{{\sf bgpp}}
+\def\td{{\sf td}}
+\def\prfpp{{\sf prfpp}}
+
+\def\gate{{f_{g}}}
+\def\gateadd{{f_{+}}}
+\def\gatemult{{f_{\times}}}
+
+%algebraic PRF
+\def\prfkg{{\sf F.KG}}
+\def\prf{{\sf F}}
+\def\cfeval{{\sf CFEval}}
+\newcommand{\cfevaloff}[1]{\ensuremath{{\sf CFEval^{off}_{#1}}}}
+\newcommand{\cfevalon}[1]{\ensuremath{{\sf CFEval^{on}_{#1}}}}
+\newcommand{\CFEvalOff}[1]{\ensuremath{{\sf CFEval^{off}_{#1}}}}
+\newcommand{\CFEvalOn}[1]{\ensuremath{{\sf CFEval^{on}_{#1}}}}
+\def\comp{{\sf Comp}}
+\newcommand\zst{\ensuremath{\kappa^*\!}}
+\newcommand\tst{\ensuremath{z^*\!}}
+\newcommand\ip[3]{\ensuremath{\langle #1 , #2 \rangle_{#3}}}
+\newcommand\ivp[3]{\ip{\vv{#1}}{\vv{#2}}{#3}}
+
+\def\primitive{\adSNARK}
+\def\aprimitive{an \adSNARK}
+\def\Aprimitive{An \adSNARK}
+\def\primitives{\adSNARKs}
+
+\def\primitiveG{\adSNARG}
+\def\aprimitiveG{an \adSNARG}
+\def\primitivesG{\adSNARGs}
+
+% System / Scheme
+\def\ADSNARG{\ensuremath{{\sf ADSNARG}}\xspace}
+\def\ADSNARK{\ensuremath{{\sf ADSNARK}}\xspace}
+\def\PGHR{\ensuremath{{\sf PGHR}}\xspace}
+\def\ADPGHR{\ensuremath{{\sf AD\mbox{-}PGHR}}\xspace}
+
+% Primitive
+\def\OSNARK{\mbox{O-SNARK}\xspace}
+\def\OSNARKs{\mbox{O-SNARKs}\xspace}
+\def\ZKOSNARK{\ensuremath{{\sf\mbox{ZK-AD-SNARK}}}\xspace}
+
+\def\APoK{{\sf AdPoK}}
+\def\OAPoK{{\sf O\mbox{-}AdPoK}}
+
+\def\VCompAuth{{\sf VCompAuth}\xspace}
+\def\VCompAuthPub{{\sf VCompAuthPub}\xspace}
+\def\VCAD{{\sf VCAD}\xspace}
+
+%homomorphic signature
+\def\HomSig{\ensuremath{{\sf HomSig}}\xspace}
+
+\def\HomKG{{\sf HomKG}}
+\def\HomSign{{\sf HomSign}}
+\def\HomVer{{\sf HomVer}}
+\def\HomEval{{\sf HomEval}}
+\def\Hide{{\sf Hide}}
+\def\HideVer{{\sf HideVer}}
+
+
+%funtional signature
+%group signature
+%other schemes
+
+\def\FSig{\ensuremath{{\sf FS}}\xspace}
+\def\GSig{\ensuremath{{\sf GS}}\xspace}
+\def\FGSig{\ensuremath{{\sf FGS}}\xspace}
+\def\PSig{\ensuremath{{\sf PS}}\xspace}
+
+
+\def\LE{\ensuremath{{\sf LE}}\xspace}
+\def\ZK{\ensuremath{{\sf ZK}}\xspace}
+
+\def\FSetup{{\sf FS.Setup}}
+\def\FKG{{\sf FS.KeyGen}}
+\def\FSign{{\sf FS.Sign}}
+\def\FVer{{\sf FS.Ver}}
+\def\Afs{\A_{\mathsf{FS}}}
+\def\Apr{\A_{\mathsf{priv}}}
+
+\def\FGSetup{{\sf FGS.Setup}}
+\def\FGKG{{\sf FGS.KeyGen}}
+\def\FGSign{{\sf FGS.Sign}}
+\def\FGVer{{\sf FGS.Ver}}
+\def\Afgs{\A_{\mathsf{FGS}}}
+\def\Apr{\A_{\mathsf{priv}}}
+
+\def\FJoin{{\sf FGS.Join}}
+\def\FIss{{\sf FGS.Iss}}
+\def\FGVf{{\sf FGS.Ver}}
+\def\FOpen{{\sf FGS.Open}}
+\def\FJudge{{\sf FGS.Judge}}
+
+
+
+\def\PSetup{{\sf P.Setup}}
+\def\PSign{{\sf P.Sign}}
+\def\Derive{{\sf P.Derive}}
+\def\PVer{{\sf P.Ver}}
+
+
+\def\GKg{{\sf GS.Setup}}
+\def\UKg{{\sf GS.KeyGen}}
+\def\Join{{\sf GS.Join}}
+\def\Iss{{\sf GS.Iss}}
+\def\GSig{{\sf GS.Sign}}
+\def\GVf{{\sf GS.Ver}}
+\def\Open{{\sf GS.Open}}
+\def\Judge{{\sf GS.Judge}}
+\def\Ags{\A_{\mathsf{GS}}}
+
+
+\def\win{\mathsf{win}}
+
+\def\multisig{\ensuremath{{\sf m\Sigma}}}
+
+
+
+% Algorithms
+\def\Setup{{\sf Setup}}
+\def\KeyGen{{\sf KeyGen}}
+\def\FuncPrep{{\sf FuncPrep}}
+\def\Gen{{\sf Gen}}
+\def\QueryPrep{{\sf QueryPrep}}
+\def\Merge{{\sf Merge}}
+\def\Auth{{\sf Auth}}
+\def\AuthKG{{\sf AuthKG}}
+\def\AuthVer{{\sf AuthVer}}
+\def\Comp{{\sf Comp}}
+\def\Prove{{\sf Prove}}
+\def\ReRand{{\sf ReRand}}
+\def\Ver{{\sf Ver}}
+\def\rhoMerge{\ensuremath{K}}
+
+%Signature Oracle
+\def\sign{{\sf Sign}}
+
+%signatures
+\def\hatS{\widehat{\Sigma}}
+\def\tildeS{\widetilde{\Sigma}}
+\def\hats{\hat{\sigma}}
+\def\tildes{\tilde{\sigma}}
+\def\bars{\bar{\sigma}}
+
+\def\SignKG{{\sf kg}}
+\def\Sign{{\sf sign}}
+\def\SignVer{{\sf vfy}}
+\def\ufcma{{\sf UF\mbox{-}CMA}}
+\def\sufcma{{\sf SUF\mbox{-}CMA}}
+
+\def\ZKKeyGen{{\sf ZK\prime KeyGen}}
+\def\ZKComp{{\sf ZK\prime Comp}}
+\def\ZKFuncPrep{{\sf ZK\prime FuncPrep}}
+\def\ZKVer{{\sf ZK\prime Ver}}
+
+\def\VerPrep{{\sf VerPrep}}
+\def\EffVer{{\sf EffVer}}
+\def\Eval{{\sf Eval}}
+\def\GateEval{{\sf GateEval}}
+\def\vgeval{{\sf VerGateEval}}
+\def\VerGateEval{{\sf VerGateEval}}
+\def\Sim{{\sf Sim}}
+\def\rplus{\fbox{$\stackrel{{+}}{\rightarrow}$}}
+\def\lplus{\fbox{$\stackrel{{+}}{\leftarrow}$}}
+
+
+\def\Sigmaf{\Sigma'}
+\def\fSignKG{{\sf kg}'}
+\def\fSign{{\sf sign}'}
+\def\fSignVer{{\sf vfy}'}
+
+% Keys
+\def\sk{{\sf sk}}
+\def\pk{{\sf pk}}
+\def\vk{{\sf vk}}
+\def\pap{{\sf pap}}
+\def\SK{{\sf SK}}
+\def\PK{{\sf PK}}
+\def\VK{{\sf VK}}
+
+
+\def\gmsk{\sf gmsk} %open key
+\def\gpk{\sf gpk}
+\def\gsk{\sf gsk}
+\def\upk{\sf upk}
+\def\usk{\sf usk}
+
+\def\hsk{\widehat{\sk}}
+\def\tsk{\widetilde{\sk}}
+\def\hvk{\widehat{\vk}}
+\def\tvk{\widetilde{\vk}}
+
+\def\MSK{{\sf MSK}}
+\def\MVK{{\sf MVK}}
+
+\def\msk{{\sf msk}}
+\def\mvk{{\sf mvk}}
+
+\def\mainsk{{\sf msk}_0}
+\def\mainvk{{\sf mvk}_0}
+\def\fsk{{\sf sk}'}
+\def\fvk{{\sf vk}'}
+
+
+
+\newcommand\QVK[2]{{\sf QVK}_{#1/#2}}
+\def\EK{{\sf EK}}
+\def\crs{{\sf crs}}
+\def\prs{{\sf prs}}
+\def\vst{{\sf vst}}
+\def\trap{{\sf tr}}
+\def\aux{\ensuremath{\mathit{aux}}\xspace}
+
+
+
+\def\id{{\it id}}   % identity function
+\def\did{{ \Delta}}
+\def\iid{{\lab}}
+\def\dset{{\sf D}}
+\def\authtag{{\sigma}}
+\def\authtagx{\authtag}
+%\def\authtagx{\authtag^{\sf x}}
+%\def\authtagw{\authtag^{\sf w}}
+\def\GroupEval{{\sf GroupEval}}
+\def\PolyEval{{\sf PolyEval}}
+
+\def\fhe{{\sf FHE}}
+\def\fheEval{{\sf FHE.Eval}}
+\def\fheKeyGen{{\sf FHE.KeyGen}}
+\def\fheEnc{{\sf FHE.Enc}}
+\def\fheDec{{\sf FHE.Dec}}
+
+\def\Poly{P}
+
+\def\hufcma{\Exp^{\sf HomSig\mbox{-}UF}}
+\def\fsufcma{\Exp^{\sf FS\mbox{-}UF}}
+\def\fspriv{\Exp^{\sf FS\mbox{-}FPri}}
+\def\zk{\Exp^{\Pi{\sf \mbox{-}ZK}}_{\A_0}}
+
+% Labels, Multi-Labels, etc...
+\def\ml{multi-label\xspace}
+\def\mls{\ml{s}\xspace}
+\def\mled{\ml{ed}\xspace}
+\def\ML{Multi-Label\xspace}
+\def\MLed{\ML{ed}\xspace}
+\def\Ml{Multi-label\xspace}
+\def\Mled{\Ml{ed}\xspace}
+\def\lab{{\tau}}
+\def\mlab{{\sf L}}
+%\def\mlabx{\mlab^{\!\sf x}}
+%\def\mlabw{\mlab^{\!\sf w}}
+\def\mlabs{{\cal L}}
+
+% QAP
+\def\cin{\mathit{in}}
+\def\cst{\mathit{x}}
+\def\cout{\mathit{out}}
+\def\cmid{\mathit{mid}}
+\def\cinmid{\cin+\cmid}
+\def\cauth{\mathit{\sigma}}
+\def\cunauth{\mathit{\star}}
+\def\QAP{\ensuremath{\mathrm{QAP}}\xspace}
+\def\QAPInst{\ensuremath{\mathsf{QAPInst}}}
+\def\QAPwit{\ensuremath{\mathsf{QAPwit}}}
+
+
+% Closed-form efficiency
+\def\cf{closed-form\xspace}
+\def\CF{Closed-Form\xspace}
+
+\def\NotZero{{\tt NotZero}}
+
+
+%TwoMultMAC
+\def\Addo{{\sf Add_0}}
+\def\AddI{{\sf Add_1}}
+\def\AddII{{\sf Add_2}}
+\def\Multo{{\sf Mult_0}}
+\def\MultI{{\sf Mult_1}}
+\def\CMultI{{\sf ConstMult_1}}
+\def\CMultII{{\sf ConstMult_2}}
+\def\ShiftI{{\sf Shift_{0 \rightarrow 1}}}
+\def\ShiftII{{\sf Shift_{1 \rightarrow 2}}}
+
+
+% ===================================================================
+\newcommand{\kwfont}[1]{{\ensuremath{\mathtt{#1}}}}
+\newcommand{\kwfunction}{{\kwfont{function}\ }}
+\newcommand{\kwlabel}{{\kwfont{label}\ }}
+\newcommand{\kwfor}{{\kwfont{for}\ }}
+\newcommand{\kwto}{{\kwfont{to}\ }}
+\newcommand{\kwand}{~\kwfont{and}~}
+\newcommand{\kwor}{{\kwfont{or}\ }}
+\newcommand{\kwnot}{{\kwfont{not}}}
+\newcommand{\kwdo}{{\kwfont{do}\ }}
+\newcommand{\kwreturn}{{\kwfont{return}\ }}
+\newcommand{\kwReturn}{{\kwfont{Return}\ }}
+\newcommand{\kwalgorithm}{{\ensuremath{\mathbf{Algorithm}\ }}}
+\newcommand{\kwprotocol}{{\kwfont{Protocol}\ }}
+\newcommand{\kwexperiment}{{\kwfont{Experiment}\ }}
+\newcommand{\kwadversary}{{\kwfont{Adversary}\ }}
+\newcommand{\kworacle}{{\kwfont{Oracle}\ }}
+\newcommand{\kwuntil}{{\kwfont{until}\ }}
+\newcommand{\kwrepeat}{{\kwfont{repeat}\ }}
+\newcommand{\kwif}{{\kwfont{if}\ }}
+\newcommand{\kwthen}{{\kwfont{then}\ }}
+\newcommand{\kwelse}{{\kwfont{else}\ }}
+\newcommand{\kwwith}{{\kwfont{with}\ }}
+\newcommand{\kwabort}{{\kwfont{abort}\ }}
+\newcommand{\kwgoto}{{\kwfont{goto}\ }}
+\newcommand{\kwwhile}{{\kwfont{while}\ }}
+\newcommand{\kwparse}{{\kwfont{parse}\ }}
+\newcommand{\kwas}{{\kwfont{as}\ }}
+\newcommand{\kwstatic}{{\kwfont{static}\ }}
+\newcommand{\kwrun}{{\kwfont{run}\ }}
+\newcommand{\kwbegin}{{\kwfont{begin}\ }}
+\newcommand{\kwend}{{\kwfont{end}\ }}
+\newcommand{\kwstart}{{\kwfont{start}\ }}
+\newcommand{\kwcontinue}{{\kwfont{continue}\ }}
+\newcommand{\kwdefine}{{\kwfont{define}\ }}
+\newcommand{\kwflip}{{\kwfont{flip}\ }}
+\newcommand{\kwlet}{{\kwfont{let}\ }}
+\newcommand{\kwof}{{\kwfont{of}\ }}
+\newcommand{\kwcase}{{\kwfont{case}\ }}
+\newcommand{\kwswitch}{{\kwfont{switch}\ }}
+\newcommand{\kwpick}{{\kwfont{pick}\ }}
+\newcommand{\kwfetch}{{\kwfont{fetch}\ }}
+\newcommand{\kwfrom}{{\kwfont{from}\ }}
+\newcommand{\kwset}{{\kwfont{set}\ }}
+\newcommand{\kwcompute}{{\kwfont{compute}\ }}
+\newcommand{\comment}[1]{\hspace{15pt}{\small /$\!\!$/\ #1}}
+\newcommand{\Comment}[1]{\hspace{5pt}{/$\!\!$/\ #1}}
+\newcommand\veq[1]{($V_{#1}$)\xspace}
+\newcommand\veqA[1]{($A.{#1}$)\xspace}
+\newcommand\veqP[1]{($P.{#1}$)\xspace}
+
+
+%% Game-related macros
+% There is a counter for the games.
+\newcounter{gm}
+\newcommand\setgame[1]{\setcounter{gm}{#1}}
+% Print line number w/o game prefix.
+\newcommand\fn{\footnotesize}
+% Print line number w/ game prefix.
+\newcommand\fng{\fn\thegm}
+%
+\newcommand\listQ{{\sf Q}}
+\newcommand\listS{{\sf S}}
+\newcommand\listT{{\sf T}}
+\newcommand\Span{\mathit{Span}}
+\newcommand\List{\mathit{List}}
+\newcommand\kwcheck{\ensuremath{\mathit{check}}}
+\newcommand{\kwout}{{\kwfont{GameOutput}}}
+\newcommand{\procfont}[1]{\textbf{{#1}}}
+\newcommand{\tablefont}[1]{\mathsf{#1}}
+\newcommand{\procInitialize}{\procfont{Initialize}}
+\newcommand{\InitializeCode}{\underline{\textbf{procedure} \procfont{Initialize}}}
+\newcommand{\procFinalize}{\procfont{Finalize}}
+\newcommand{\FinalizeCode}{\underline{\textbf{procedure} \procfont{Finalize}}}
+\newcommand{\procGen}{{\procfont{Gen}}}
+\newcommand{\GenCode}[1]{\underline{\textbf{procedure} \procfont{Gen}$(#1)$}}
+\newcommand{\procFuncPrep}{{\procfont{FuncPrep}}}
+\newcommand{\FuncPrepCode}[1]{\underline{\textbf{procedure} \procfont{FuncPrep}$(#1)$}}
+\newcommand{\procQueryPrep}{{\procfont{QueryPrep}}}
+\newcommand{\QueryPrepCode}[1]{\underline{\textbf{procedure} \procfont{QueryPrep}$(#1)$}}
+\newcommand{\MergeCode}[1]{\underline{\textbf{procedure} \procfont{Merge}$(#1)$}}
+\newcommand{\procAuth}{{\procfont{Auth}}}
+\newcommand{\AuthCode}[1]{\underline{\textbf{procedure} \procfont{Auth}$(#1)$}}
+\newcommand{\procVer}{{\procfont{Ver}}}
+%\newcommand{\procVerE}{{\procfont{Ver}}_E}
+\newcommand{\VerCode}[1]{\underline{\textbf{procedure} \procfont{Ver}$(#1)$}}
+%\newcommand{\VerECode}[1]{\underline{\textbf{procedure} \procfont{Ver}$_E(#1)$}}
+
+\newcommand{\procTest}{\procfont{Test}}
+\newcommand{\procLR}{\procfont{LR}}
+\newcommand{\LRCode}[1]{\underline{\procfont{procedure} \procfont{LR}$(#1)$}}
+\newcommand{\sWLR}{\procfont{sW.LR}}
+\newcommand{\sWExtract}{\procfont{sW.Extract}}
+\newcommand{\goutputs}{\:{\Rightarrow}\:}
+\newcommand{\outputs}{\textrm{ outputs }}
+\newcommand{\wins}{\textrm{ wins}}
+\newcommand{\union}{\;\cup\;}
+
+%\renewcommand{\fbox}[1]{\fbox{#1}}
+\newcommand\ch[1]{\textcolor{blue}{#1}}
+\newcommand\chbox[1]{\dbox{\ch{#1}}}
+\newcommand\del[1]{\textcolor{red}{#1}}
+\definecolor{attacker}{rgb}{.9,.9,.9}
+\newcommand\att[1]{\colorbox{attacker}{\ensuremath{#1}}}
+
+
+

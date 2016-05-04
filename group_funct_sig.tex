@@ -1,0 +1,468 @@
+\documentclass[11pt]{llncs}
+\usepackage{fullpage}
+
+%
+\usepackage{latexsym,color}
+\usepackage{amscd,amsmath,amssymb}
+\usepackage{amsfonts}
+\usepackage{pifont}
+\usepackage{paralist}
+\usepackage{soul}
+\usepackage{boxedminipage}
+\usepackage{xspace}
+\usepackage{dashbox}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+
+
+\title{Notes on Malleable Signatures}
+
+%\date{} % delete this line to display the current date
+% \institute{
+%IMDEA Software Institute, Madrid, Spain
+%\\ \email{\{dario.fiore\}@imdea.org}
+%\and
+%ENS, CNRS, INRIA, and PSL, Paris, France
+%\\ \email{Anca.Nitulescu@ens.fr}
+% }
+
+\author{}
+\institute{}
+
+
+\usepackage{color}
+\usepackage{notes}
+\usepackage{framed}
+
+ \usepackage{a4wide}
+ 
+ \usepackage{enumitem}
+\usepackage{amssymb}
+  % \setlength{\parskip}{0.1\baselineskip}
+\usepackage{multicol}
+
+%
+\usepackage[utf8]{inputenc} %
+%
+\usepackage{amsmath,amssymb,booktabs}
+
+
+\begin{document}
+\maketitle
+\input{header1}
+
+
+
+%\section*{Functional Signatures}
+%
+%\subsubsection{Definition of Functional Signatures.} \cite{PKC:BoyGolIva14}.
+%
+%
+%A functional signature scheme $\FSig$ for a message space $\M$ and function family 
+%$\F =\lbrace f:\D_f \to \M \rbrace$  is a tuple of probabilistic, polynomial-time algorithms
+%$(\FSetup, \FKG, \FSign, \FVer)$ that work as follows
+%\begin{itemize}
+%\item $\FSetup(1^\lambda)$: takes a security parameter $\lambda$ and outputs a 
+%master verification key $\mvk$ and a master secret key $\msk$.
+%
+%\item $\FKG(\msk, f)$: takes the master secret key $\msk$ and a function $f \in \F$
+%(represented as a circuit) and it outputs a signing key $\sk_f$ for $f$.
+%
+%\item $\FSign(\mvk, f, \sk_f, m)$: takes as input a function $f \in \F$, the signing key
+%$\sk_f$ for that, and a message $m \in  \D_f$, and it outputs $(f(m), \sigma)$ where
+%$\sigma$ represents a  signature on $f(m)$.
+%
+%\item $\FVer(\mvk,  m^*, \sigma)$: takes as input the master verification key $\mvk$,
+%a message $m^* \in \M$ and a signature $\sigma$, and outputs either $1$ (accept)
+%or $0$ (reject).
+%\end{itemize}
+%and satisfy {\em correctness}, {\em unforgeability},  and {\em function privacy}
+%as described below. 
+%\begin{itemize}
+%
+%\item \textbf{Correctness.} A functional signature scheme is correct if the following 
+%holds with probability 1:
+%$$\forall f \in \F, \ \forall m \in  \D_f, \ (\msk, \mvk) \gets \FSetup(1^\lambda), \  \sk_f  \gets \FKG(\msk, f), $$
+%$$  (m^*,\sigma) \gets  \FSign(\mvk, f,  \sk_f, m), \FVer(\mvk, m^*, \sigma) = 1 $$
+%
+%
+%
+%\item \textbf{Unforgeablity.} A functional signature scheme is unforgeable if for 
+%every PPT adversary $\A$ there is a negligible function $\epsilon$ such that 
+%$\Pr[\fsufcma_{\A, \FSig}(\lambda) = 1] \leq \epsilon(\lambda)$ where the experiment 
+%$\fsufcma_{\A, \FSig}(\lambda)$ is described in the following:\\
+%
+%\begin{itemize}
+%
+%\item[{ Key gen:}] The challenger generates $(\msk, \mvk) \gets  \FSetup(1^\lambda)$,
+%and gives $\mvk$ to $\A$.
+%
+%\item[{ Queries:}] The adversary is allowed to adaptively query a key generation oracle $\Ok$
+%and a signing oracle $\Os$, that share a dictionary $D$ indexed by tuples $(f, i) \in \F \times \mathbb{N}$,
+%whose entries are signing keys. For answering these queries, the challenger proceeds as follows:
+%
+%\item $\Ok$ $(f, i)$:
+%
+%\begin{itemize}
+%
+%\item If $(f, i) \in D$ (i.e., the adversary had already
+%queried the tuple $(f,i)$), then the challenger replies with the same
+%key $\sk_f^i$ generated before.
+%
+%\item Otherwise, generate a new $\sk_f^i \gets \FKG(\msk,f)$, add the entry 
+%$(f,i) \to \sk_f^i$ in $D$, and return $\sk_f^i$.
+% 
+%\end{itemize}
+%
+%\item $\Os$ $(f, i,m)$: 
+%\begin{itemize}
+%\item If there exists an entry for the key $(f, i)$ in $D$, then the challenger
+%generates a signature on $f(m)$ using this key, i.e., 
+%$\sigma \gets \FSign(\mvk, f, \sk_f^i, m)$.
+%
+%\item Otherwise, generate a new key $\sk_f^i \gets \FKG(\msk,f)$, add an
+%entry $(f,i) \to \sk_f^i$ to $D$, and generate a signature on $f(m)$ using this
+%key, i.e., $\sigma \gets \FSign(\mvk, f, \sk_f^i, m)$.\\
+%
+%\end{itemize}
+%
+%\item[Forgery:] After the adversary is done with its queries, it outputs a pair
+%$(m^*, \sigma)$, and the experiment outputs 1 iff the following conditions hold
+%\begin{itemize}
+%\item $\FVer(\mvk,  m^*, \sigma)=1$.
+%\item there does not exist $m$ such that $m^* = f(m)$ for any $f$ which was
+% sent as a query to the $\Ok$ oracle.
+%\item there does not exist a pair $(f,m)$ such that $(f,m)$ was a query to the
+% $\Os$ oracle and $m^*= f(m)$.
+%\end{itemize}
+%\end{itemize}
+%
+%
+%\item \textbf{Function privacy.} Intuitively, function privacy requires that the
+%distribution of signatures on a message $m$ that are generated via different
+%keys $\sk_f$ should be computationally indistinguishable, even given the 
+%secret keys and master signing key. 
+%More formally, a functional signature scheme has function privacy if for every
+%PPT adversary $\A$ there is a negligible function $\nu$ such that
+%$\Pr[\fspriv_{\A, \FSig}(\lambda) = 1] \leq \nu(\lambda)$ where experiment 
+%$\fspriv_{\A, \FSig}(\lambda)$ works as follows:
+%\begin{itemize}
+%\item The challenger generates a key pair $(\mvk, \msk)  \gets \FSetup(1^\lambda)$
+%and gives $(\mvk, \msk)$ to $\A$.
+%\item The adversary chooses a function $f_0$ and receives an (honestly generated)
+% secret key $\sk_{f_0} \gets \FKG(\msk, f_0)$.
+%\item The adversary chooses a second function $f_1$ such that $|f_0|=|f_1|$ (where
+% padding can be used if there is a known upper bound) and receives an (honestly 
+% generated) secret key $\sk_{f_1} \gets \FKG(\msk, f_1)$.
+%\item The adversary chooses a pair of values $(m_0, m_1)$ such that $|m_0| = |m_1|$
+% and $f_0(m_0) = f_1(m_1)$.
+%\item The challenger selects a random bit $b \gets \bits$ and computes a signature  
+% on the image message $m^* =f_0(m_0) = f_1(m_1)$ using secret key $\sk_{f_b}$,
+% and gives the resulting signature $\sigma \gets  \FSign(\sk_{f_b}, m_b)$ to $\A$.
+%\item The adversary outputs a bit $b'$, and the experiment outputs 1 iff $b' = b$.
+%\end{itemize} 
+%\end{itemize}
+%
+%\textbf{Succinct Functional Signatures}
+%
+%A functional signature scheme is called {\em succinct} if there exists a polynomial
+%$s(\cdot)$ such that, for every security parameter $\lambda \in \NN$, $f \in \F$,
+%$m \in \D_{f}$, it holds with probability 1 over $(\mvk, \msk)  \gets \FSetup(1^\lambda)$,
+%$\sk_{f} \gets \FKG(\msk, f)$, $(f(m), \sigma) \gets  \FSign(\sk_{f}, m)$ that
+%$|\sigma| \leq s(\secpar, |f(m)|)$. In particular, the size of $\sigma$ is independent
+%of the function's size, $|f|$, and the function's input size, $|m|$.
+%
+%
+%\newpage
+%
+%\subsubsection{Non-Succinct Functional Signatures Construction}\label{sec:funcsigconstr}
+%To build the scheme, we use two $\ufcma$-secure signature schemes,
+%$\Sigmaf=(\fSignKG, \fSign, \fSignVer)$ for message space $\D$ and 
+%$\Sigma_0=(\SignKG_0, \Sign_0, \SignVer_0)$ for message space $\M$.
+%%together with a fully succinct zero-knowledge \OSNARK $\Pi=(\Gen, \Prove, \Ver)$ 
+%%for the following $\NP$ language.
+%%we obtain an unforgeable functional signature scheme satisfying succinctness and function privacy $\mathsf{FS}= (\FSetup,\FKG, \FSign, \FVer)$.
+%
+%%
+%
+%
+%\headingb{The construction.} 
+%Considering the signature schemes $\Sigma_0,\Sigma'$, we construct the functional signature 
+%scheme $\FSig[\Sigma_0,\Sigma_1]= (\FSetup, \allowbreak \FKG, \allowbreak  \FSign, \allowbreak  \FVer)$
+%as follows:
+%\begin{itemize}
+%\item $\FSetup(1^\lambda):$ \ \\
+%Generate a pair of keys for $\Sigma_0$: $(\msk, \mvk) \gets \SignKG_0(1^{\secpar})$.\\
+%Output $(\msk, \mvk)$. \\
+%
+%\item $\FKG(\msk, f):$ \ \\
+%Generate a new key pair for the scheme $\Sigma'$: $(\fsk, \fvk)  
+%\gets \fSignKG(1^{\secpar})$.\\
+%Compute $\sigma_{\fvk} \gets  \Sign_0(\msk, f|\fvk)$, and let the certificate
+%$c$ be $c = (f, \fvk, \sigma_{\fvk})$.\\
+%Output $\sk_f = (\fsk, c)$.\\
+%
+%\item $\FSign(\mvk, f, \sk_f, m):$ \ \\
+%Parse $\sk_f$ as $(\fsk, c = (f, \fvk, \sigma_{\fvk}))$. \\
+%Sign $m$ using $\fsk$ in $\Sigma'$: $\sigma_m \gets  \fSign(\fsk,m)$.\\
+%Output $\sigma=(m, f, \fvk, \sigma_{\fvk}, \sigma_m)$.\\
+%
+%
+%\item $\FVer(\mvk,  m^*, \sigma) $:  \ \\
+%Parse $\sigma=(m, f, \fvk, \sigma_{\fvk}, \sigma_m)$\\
+%Check:
+%$(1)  \  m^* = f(m), \hspace{9pt} (2) \ \fSignVer(\fvk, m, \sigma_m) = 1, \hspace{9pt} (3) \ \SignVer_0(\mvk, f|\fvk, \sigma_{\fvk}) = 1.$\\
+% Output $0$ or $1$ accordingly. 
+%% i.e., verify that $\pi$ is a valid argument of knowledge of a witness  $\sigma = (m, c = (f, \fvk, \sigma_{\fvk}), \sigma_m)$. \\
+%
+%\end{itemize}
+%
+%
+%
+%\subsubsection{Definition of Group Signatures.} \cite{RSA:BelShiZha05}.
+%
+%
+%
+%
+%A group signature scheme $\GSig$ for a message space $\M$ and group of $n$ users, each of them with a unique identity $i \in [n]$ is a tuple of probabilistic, polynomial time algorithms
+% $\GSig = (\GKg, \UKg, \GSig, \GVf, \Open, \Judge)$ whose intended
+%usage and functionality are as follows. 
+%
+%
+%
+%\begin{itemize}
+%\item $\GKg(1^n)$: takes a security parameter the number of users to obtain a triple $(\gpk, \gmsk, \gsk[i])$.\\
+%The group public key $\gpk$, whose possession enables signature verification, is made public. \\
+%The opening key $\gmsk$ is provided to the group manager. 
+%All users that are group members have a private signing key, denoted $\gsk[i]$.\\
+%
+%\item $\UKg(1^n)$ outputs a personal public and private key pair $(\upk[i], \usk[i])$.\\
+% We assume that the values $\upk$ are public. (Meaning, anyone can obtain an authentic copy of the personal
+%public key of any user. This might be implemented via a PKI.)\\
+%
+%\item $ \GSig(\gpk, \gsk[i], m)$: a group member, in possession of its signing key $\gsk[i]$, 
+%can apply the group signing algorithm for a message $m \in \M$ to obtain a signature $\sigma$.\\
+%
+%\item $\GVf(\gpk,  m, \sigma)$: anyone in possession of the group public key $\gpk$ can run the deterministic group signature
+%verification algorithm on inputs a message $m$, and a candidate signature $\sigma$ for $m$, to obtain
+%a bit $0/1$. \\
+%
+%\item $\Open(\gpk, \gmsk, m, \sigma)$: the group manager, using his master key
+%can apply the deterministic opening algorithm to
+%a message $m$, and a valid signature $\sigma$ of $m$ under $\gpk$.\\
+%The algorithm returns a pair $(i, \tau)$, where $i$ is the identity of the member who produced $\sigma$
+% and $\tau$ is a proof of this claim that can be verified via the $\Judge$ algorithm.\\
+% 
+% \item $\Judge(\gpk, j , m, \sigma, \tau)$: it aims to check that $\tau$ is a proof that user $j$
+%produced $\sigma$. We note that the judge will base its verification on the public key of user $j$.
+%
+%\end{itemize}
+%
+%\subsubsection{A Short Group Signature construction.} \cite{C:BonBoySha04}
+%We give the idea for construction of the short group signature 
+%scheme of Boneh and all.
+%Starting from an interactive Zero-Knowledge protocol for SDH, call it $ \ZK $, 
+%and from the linear encryption protocol 
+%$\LE$ we define a group signature scheme $\GSig[\ZK, \LE]= (\GKg, \UKg, \GSig, \GVf, \Open)$.
+%
+%\headingb{Building Blocks}
+%
+%Let $\GG_1, \GG_2, \GG_T$ be three (multiplicative) cyclic groups of prime order $p$, 
+%where possibly $\GG_1 = \GG_2$. Let $g_1$ be a generator of $\GG_1$ and $g_2$ a generator of $\GG_2$. 
+%Consider the isomorphism $\psi$ from $\GG_2$ to $\GG_1$, with $\psi(g_2) = g_1$ and the bilinear map 
+%$e : \GG_1 \times  \GG_2 \to \GG_T$ 
+%
+%
+%\heading{Linear Encryption.} The Decision Linear problem gives rise to the Linear
+%encryption $\LE$ scheme, a natural extension of ElGamal encryption. Unlike
+%ElGamal encryption, Linear encryption can be secure even in groups where a
+%DDH-deciding algorithm exists. In this scheme, a user’s public key is a triple
+%of generators $u, v, h \in \GG_1$, his private key is the exponents $x, y \in \ZZ_p$ such that
+%$u^x = v^y = h$. To encrypt a message $M \in  \GG_1$, choose random values $a, b \in \ZZ_p$, and
+%output the triple $(u^a, v^b,m \dot h^{a+b})$. To recover the message from an encryption
+%$(T_1, T_2, T_3)$, the user computes $T_3/(T_1^x T_2^y)$. By a natural extension of the proof
+%of security of ElGamal, $\LE$ is semantically secure against a chosen-plaintext
+%attack, assuming Decision-LA holds.
+%
+%\heading{Zero-Knowledge Protocol for SDH}
+%We present the protocol for proving possession of a solution to
+%an SDH problem. The public values are $g_1, u, v, h \in \GG_1$ and $g_2, w \in \GG_2$. Here
+%$w = g_2^\gamma$ for some (secret) $\gamma \in  \ZZ_p$. The protocol proves possession of a pair
+%$(A, x)$, where $A \in \GG_1$ and $x \in \ZZ_p$, such that $A^{x+\gamma} = g_1$. Such a pair satisfies
+%$e(A,wg_2^x) = e(g_1, g_2)$. We use a standard generalization of Schnorr's protocol for
+%proving knowledge of discrete logarithm in a group of prime order.
+%
+%The prover, Alice, selects exponents $\alpha, \beta \getsr \ZZ_p$ and computes a
+%linear encryption $(T_1, T_2, T_3)$ of $A$:
+%$$T_1 \gets u^\alpha  \ T_2 \gets v^\beta  \  T_3 \gets Ah^{\alpha + \beta}$$
+%
+%She also computes two helper values $\delta_1 \gets x^\alpha$ and $\delta_2 \gets x^\beta$.
+%
+%Alice and Bob then undertake a proof of knowledge of values $(\alpha, \beta, x, \delta_1, \delta_2) $
+%satisfying the following five relations:
+%
+%$$ u^\alpha = T_1   \hspace{28pt}  v^\beta =T_2 $$
+%$$ e (T_3, g_2)^x \cdot e(h,w)^{-\alpha-\beta} \cdot e(h, g_2)^{-\delta_1-\delta_2} = e(g_1, g_2)/e(T_3, w)$$
+%$$T_1^xu^{-\delta_1}=1  \hspace{23pt} T_2^xv^{-\delta_2}=1$$
+%
+%This proof proceeds as follows:
+%%
+%\[
+%\begin{array}{@{}@{}l@{}c@{}l@{}@{}}
+% \text{ Prover} \ \mathcal{A} & & \text{Verifier} \ \mathcal{B} \\
+%\toprule
+% \textbf{Step (1)}&&\\
+%\text{compute } \LE \text{ $T_i$ of } A \ \ & &\\ 
+%\text{and blinding values } R_i \ \ &&\\
+%
+%& \xrightarrow{\textstyle (T1, T2, T3, R1, R2, R3, R4, R5) } \\
+%
+%&&\textbf{Step (2)}\\
+%&&  \text{challenge } c \getsr \ZZ_p\\ 
+%
+%& \xleftarrow {\textstyle \  \ c \ \ } \\
+%
+%\textbf{Step (3)} &&\\
+%\text{using $c$, compute} & &\\
+%s_\alpha \ s_\beta \ s_x \ s_{\delta_1}  \ s_{\delta_2}  \\
+%
+% & \xrightarrow{\textstyle (s_{\alpha} , s_{\beta} , s_x , s_{\delta_1} , s_{\delta_2})   } \\
+% 
+% & & \textbf{Step (4)}\\
+%   & &    \text{ verify received values using } T_i, R_i \\
+%     & &    \text{ accept/reject} \\
+%  
+%\bottomrule
+%\end{array}
+%\]
+%
+%
+%
+%\headingb{GS Construction}
+%\begin{itemize}
+%
+%\item $\GKg(1^n)$: 
+%The group public key $\gpk=(g_1, g_2, h, u, v, w)$, whose possession enables signature verification, is made public. \\
+%The opening key $\gmsk$ is the private key of the linear encryption $\xi_1, \xi_2$ (the exponents s.t. $u^{\xi_1}=v^{\xi_2}=h$).\\
+%Each user private signing key $\gsk[i]=(A_i, x_i)$ is a solution to
+%a SDH problem for $w = g^\gamma$.\\
+%No party is allow to possess $\gamma$.\\
+%
+%
+%\item $ \GSig(\gpk, \gsk[i], M)$: A signature $\sigma$ is a
+%proof of knowledge, which is itself a transcript of the $\ZK$ protocol including 
+%the linear encryption $(T_1, T_2, T_3)$ of $A$ for some $\alpha, \beta \in \ZZ_p$:
+%$$T_1 \gets u^\alpha  \ T_2 \gets v^\beta  \  T_3 \gets Ah^{\alpha + \beta}$$
+%
+%\item $\GVf(\gpk,  M, \sigma)$: Verifying the signature entails verifying that the transcript is correct.\\
+%
+%\item $\Open(\gpk, \gmsk, m, \sigma)$: The group manager,first verifies that $\sigma$ is a valid signature on $m$.\\
+%Then, using his master key $\gmsk = (\xi_1, \xi_2)$ it
+%can decrypt $(T_1, T_2, T_3)$ to recover $A \gets T_3/(T_1^{\xi_1}T_2^{\xi_2})$.\\ 
+%If the group manager is given the elements $\{A_i\}$ of the user's private keys, it can look up the user 
+%index corresponding to the identity $A$ recovered from the signature and so, trace it back.
+% \end{itemize}
+%%
+%
+
+
+
+
+\subsection{Functional Group Signatures.} \cite{PKC:BoyGolIva14}.
+
+
+
+\subsubsection{Definition \cite{RSA:BelShiZha05}.
+
+
+A functional group signature scheme $\FGSig$ for a message space $\M$, a function family 
+$\F =\lbrace f:\D_f \to \M \rbrace$ and group of $n$ users, each of them with a unique identity $i \in [n]$ is a tuple of probabilistic, polynomial time algorithms
+ $\FGSig = (\FGSetup, \FGKG, \FGSign, \FGVer)(\FGKg, \FUKg, \FOpen, \FJudge)$ whose intended
+usage and functionality are as follows:
+
+
+\begin{itemize}
+\item $\FGSetup(1^\lambda, n)$: takes a security parameter $\lambda$, the number $n$ of users to obtain a triple $(\gpk_f, \gmsk_f, \gsk_f[i])$ for each group and each function.\\ 
+Outputs a master verification key $\mvk$ and a master secret key $\msk$.
+
+\item $\FKG(\msk, f)$: takes the master secret key $\msk$ and a function $f \in \F$
+(represented as a circuit) and it outputs a signing key $\sk_f$ for $f$.
+
+\item $\FSign(\mvk, f, \sk_f, m)$: takes as input a function $f \in \F$, the signing key
+$\sk_f$ for that, and a message $m \in  \D_f$, and it outputs $(f(m), \sigma)$ where
+$\sigma$ represents a  signature on $f(m)$.
+
+\item $\FVer(\mvk,  m^*, \sigma)$: takes as input the master verification key $\mvk$,
+a message $m^* \in \M$ and a signature $\sigma$, and outputs either $1$ (accept)
+or $0$ (reject).
+\end{itemize}
+
+\begin{itemize}
+\item $\GKg(1^n)$: takes a security parameter 
+The group public key $\gpk$, whose possession enables signature verification, is made public. \\
+The opening key $\gmsk$ is provided to the group manager. 
+All users that are group members have a private signing key, denoted $\gsk[i]$.\\
+
+\item $\UKg(1^n)$ outputs a personal public and private key pair $(\upk[i], \usk[i])$.\\
+ We assume that the values $\upk$ are public. (Meaning, anyone can obtain an authentic copy of the personal
+public key of any user. This might be implemented via a PKI.)\\
+
+\item $ \GSig(\gpk, \gsk[i], m)$: a group member, in possession of its signing key $\gsk[i]$, 
+can apply the group signing algorithm for a message $m \in \M$ to obtain a signature $\sigma$.\\
+
+\item $\GVf(\gpk,  m, \sigma)$: anyone in possession of the group public key $\gpk$ can run the deterministic group signature
+verification algorithm on inputs a message $m$, and a candidate signature $\sigma$ for $m$, to obtain
+a bit $0/1$. \\
+
+\item $\Open(\gpk, \gmsk, m, \sigma)$: the group manager, using his master key
+can apply the deterministic opening algorithm to
+a message $m$, and a valid signature $\sigma$ of $m$ under $\gpk$.\\
+The algorithm returns a pair $(i, \tau)$, where $i$ is the identity of the member who produced $\sigma$
+ and $\tau$ is a proof of this claim that can be verified via the $\Judge$ algorithm.\\
+ 
+ \item $\Judge(\gpk, j , m, \sigma, \tau)$: it aims to check that $\tau$ is a proof that user $j$
+produced $\sigma$. We note that the judge will base its verification on the public key of user $j$.
+
+\end{itemize}
+
+
+\subsubsection*{Open questions}
+\ \\
+
+\heading{Outsourcing Setting}
+
+How can we obtain privacy for  $f(m)$ in $\FSign$ algorithm. 
+
+One possible way is to use FHE and hide the message $m$ by encrypting it under de FHE scheme  $c = FHE(m)$.
+
+The $\FVer(\mvk,  FHE(f(c)), \sigma) $ needs now an additional procedure of extracting (decrypting) to get back the evaluation $f(m)$ from  $FHE(f(c))$: $Dec(FHE(f(c))=f(Dec(c))=f(m)$.
+
+\ \\
+
+\heading{Functional Group Signatures} 
+
+How can we obtain a new primitive/protocol that achieves group signature (\cite{C:BonBoySha04}) and functional signature proprieties at the same time.
+
+We want to associate different functions $f_i$ to different users of a group while preserving the fact that signatures coming from different users are indistinguishable.
+
+The same type of construction can be used to obtain Group Signatures for Homomorphic Encryption.
+
+ The issue can be the tracing algorithm required by the Group Signature setting. What would we like to trace in these new protocols?
+ 
+ An interesting primitive to use would be the Constrain PRFs (or Key Homomorphic PRFs). 
+
+
+ 
+\bibliographystyle{alpha}
+\bibliography{abbrev3,crypto}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+%\balancecolumns
+\end{document}
